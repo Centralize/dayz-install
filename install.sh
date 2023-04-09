@@ -75,9 +75,9 @@ UBUNTU_VERSION=$(get_ubuntu_version)
 if "$INSTALL_STEAMCMD" || "$INSTALL_ALL"; then
   echo "Installing dependencies for SteamCMD..."
   if [[ "$UBUNTU_VERSION" == "20.04" || "$UBUNTU_VERSION" == "20.10" || "$UBUNTU_VERSION" == "21.04" || "$UBUNTU_VERSION" == "21.10" || "$UBUNTU_VERSION" == "22.04" ]]; then
-    apt install -y curl lib32gcc-s1
+    sudo apt install -y curl lib32gcc-s1
   else
-    apt install -y curl lib32gcc1
+    sudo apt install -y curl lib32gcc1
   fi
   install_steamcmd
 fi
