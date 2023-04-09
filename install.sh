@@ -65,7 +65,7 @@ if ! "$INSTALL_STEAMCMD" && ! "$INSTALL_LINUXGSM" && ! "$INSTALL_ALL"; then
 fi
 
 # Check root privilege
-check_root
+#check_root
 
 # Install dependencies
 apt update
