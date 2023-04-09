@@ -85,7 +85,7 @@ fi
 # Install LinuxGSM if selected
 if "$INSTALL_LINUXGSM" || "$INSTALL_ALL"; then
   echo "Installing dependencies for LinuxGSM..."
-  apt install -y curl
+  sudo apt install -y curl
   install_linuxgsm
 fi
 
