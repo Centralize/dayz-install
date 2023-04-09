@@ -27,7 +27,7 @@ install_steamcmd() {
 # Function to install LinuxGSM
 install_linuxgsm() {
   echo "Installing LinuxGSM..."
-  curl -sSL https://linuxgsm.sh | sudo bash
+  curl -sSL https://linuxgsm.sh | bash
 }
 
 # Parse command line parameters
@@ -68,7 +68,7 @@ fi
 #check_root
 
 # Install dependencies
-apt update
+sudo apt update
 UBUNTU_VERSION=$(get_ubuntu_version)
 
 # Install SteamCMD if selected
