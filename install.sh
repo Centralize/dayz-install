@@ -20,7 +20,6 @@ install_steamcmd() {
   STEAMCMD_URL="https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz"
   mkdir -p "$STEAMCMD_DIR"
   curl -sSL "$STEAMCMD_URL" | tar -xzC "$STEAMCMD_DIR"
-  # Add SteamCMD to PATH
   echo 'export PATH="/opt/steamcmd:$PATH"' >> /etc/profile.d/steamcmd.sh
   source /etc/profile.d/steamcmd.sh
 }
@@ -32,20 +31,23 @@ install_linuxgsm() {
 }
 
 # Parse command line parameters
+INSTALL_STEAMCMD=false
+INSTALL_LINUXGSM=false
+INSTALL_ALL=false
+
+# Loop through parameters
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
     --steamcmd)
       INSTALL_STEAMCMD=true
-      shift
       ;;
     --linuxgsm)
       INSTALL_LINUXGSM=true
-      shift
       ;;
     --all)
       INSTALL_STEAMCMD=true
       INSTALL_LINUXGSM=true
-      shift
+      INSTALL_ALL=true
       ;;
     *)
       echo "Invalid parameter: $1"
@@ -53,10 +55,11 @@ while [[ "$#" -gt 0 ]]; do
       exit 1
       ;;
   esac
+  shift
 done
 
 # If no parameters are provided, show help screen
-if [ "$#" -eq 0 ]; then
+if ! "$INSTALL_STEAMCMD" && ! "$INSTALL_LINUXGSM" && ! "$INSTALL_ALL"; then
   echo "Usage: ./install.sh [--steamcmd] [--linuxgsm] [--all]"
   exit 1
 fi
@@ -68,25 +71,27 @@ check_root
 apt update
 UBUNTU_VERSION=$(get_ubuntu_version)
 
-if [[ "$INSTALL_STEAMCMD" == "true" || "$INSTALL_LINUXGSM" == "true" || "$INSTALL_ALL" == "true" ]]; then
+# Install SteamCMD if selected
+if "$INSTALL_STEAMCMD" || "$INSTALL_ALL"; then
+  echo "Installing dependencies for SteamCMD..."
   if [[ "$UBUNTU_VERSION" == "20.04" || "$UBUNTU_VERSION" == "20.10" || "$UBUNTU_VERSION" == "21.04" || "$UBUNTU_VERSION" == "21.10" || "$UBUNTU_VERSION" == "22.04" ]]; then
     apt install -y curl lib32gcc-s1
   else
     apt install -y curl lib32gcc1
   fi
-fi
-
-# Install SteamCMD if selected
-if [ "$INSTALL_STEAMCMD" == "true" ] || [ "$INSTALL_ALL" == "true" ]; then
   install_steamcmd
 fi
 
 # Install LinuxGSM if selected
-if [ "$INSTALL_LINUXGSM" == "true" ] || [ "$INSTALL_ALL" == "true" ]; then
+if "$INSTALL_LINUXGSM" || "$INSTALL_ALL"; then
+  echo "Installing dependencies for LinuxGSM..."
+  apt install -y curl
   install_linuxgsm
 fi
 
 # Print Ubuntu version and installation success message
-if [ "$INSTALL_STEAMCMD" == "true" ] || [ "$INSTALL_LINUXGSM" == "true" ] || [ "$INSTALL_ALL" == "true" ]; then
-  echo
+if "$INSTALL_STEAMCMD" || "$INSTALL_LINUXGSM" || "$INSTALL_ALL"; then
+  echo "Ubuntu version: $(get_ubuntu_version)"
+  echo "Installation completed successfully."
+fi
 
