@@ -27,7 +27,7 @@ install_steamcmd() {
 # Function to install LinuxGSM
 install_linuxgsm() {
   echo "Installing LinuxGSM..."
-  curl -sSL https://linuxgsm.sh | bash
+  curl -sSL https://linuxgsm.sh install dayzserver | bash
 }
 
 # Parse command line parameters
